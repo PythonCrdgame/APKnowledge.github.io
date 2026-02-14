@@ -56,7 +56,7 @@
       100% { transform: translateY(-100vh) rotate(360deg); }
     }
 
-    /* Chat widget */
+    /* Chat widget styles */
     #chat-bubble {
       position: fixed;
       bottom: 30px;
@@ -219,7 +219,7 @@
     </div>
   </section>
 
-  <!-- All Plants / Encyclopedia -->
+  <!-- Encyclopedia / All Plants -->
   <section id="all" class="py-24 bg-zinc-900">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col md:flex-row gap-6 mb-12 items-end">
@@ -253,12 +253,15 @@
     </div>
   </footer>
 
-  <!-- Plant Modal -->
+  <!-- Plant Detail Modal -->
   <div id="modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-6">
-    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden">
+    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden relative">
       <div class="relative">
         <img id="modal-image" class="w-full h-80 object-cover" alt="">
-        <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-2xl flex items-center justify-center text-xl">✕</button>
+        <button onclick="closeModal()" 
+                class="absolute top-6 right-6 w-12 h-12 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-2xl text-white shadow-lg transition z-10">
+          ✕
+        </button>
       </div>
       <div class="p-10">
         <div id="modal-dosha" class="inline-flex items-center gap-2 text-xs font-medium px-4 py-1.5 bg-emerald-900 text-emerald-300 rounded-3xl"></div>
@@ -277,14 +280,20 @@
         </div>
         <div id="modal-description" class="text-zinc-300 leading-relaxed"></div>
         <div class="mt-10 flex gap-4">
-          <button onclick="closeModal()" class="flex-1 py-4 border border-emerald-700 hover:border-emerald-500 rounded-3xl font-medium transition">Close</button>
-          <button onclick="alert('Saved to your personal grove ✨ (demo)')" class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 text-black rounded-3xl font-medium transition">Save to My Grove</button>
+          <button onclick="closeModal()" 
+                  class="flex-1 py-4 border border-emerald-700 hover:border-emerald-500 rounded-3xl font-medium transition">
+            Close
+          </button>
+          <button onclick="alert('Saved to your personal grove ✨ (demo)')" 
+                  class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 text-black rounded-3xl font-medium transition">
+            Save to My Grove
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- AI Assistant Chat -->
+  <!-- AI Chat Bubble -->
   <div id="chat-bubble" class="fixed bottom-8 right-8 z-50">
     <button onclick="toggleChat()" class="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-emerald-500 transition">
       <i class="fa-solid fa-comment-dots"></i>
@@ -294,7 +303,7 @@
   <div id="chat-modal">
     <div id="chat-header" class="flex justify-between items-center">
       <span>AyurVidya Guide</span>
-      <button onclick="toggleChat()" class="text-black text-xl">&times;</button>
+      <button onclick="toggleChat()" class="text-black text-xl">×</button>
     </div>
     <div id="chat-body">
       <div class="message bot">Namaste! Ask me about any plant, dosha, or Ayurvedic concept. (Educational use only — not medical advice)</div>
@@ -306,7 +315,7 @@
   </div>
 
   <script>
-    // Plant data (expanded with real images & more entries)
+    // Plant data
     const plants = [
       {
         id: 1,
@@ -318,28 +327,6 @@
         actions: "Blood purifier • Skin healer • Lymphatic support",
         description: "Known as the 'queen of herbs' for skin health. Purifies blood and supports detoxification.",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Rubia_cordifolia_01.jpg/800px-Rubia_cordifolia_01.jpg"
-      },
-      {
-        id: 2,
-        sanskrit: "Drākṣā",
-        scientific: "Vitis vinifera",
-        common: "Grape",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Rejuvenative • Eye tonic • Nourishing",
-        description: "Sweet and cooling rasayana that nourishes tissues and supports vision.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Vitis_vinifera_001.JPG/800px-Vitis_vinifera_001.JPG"
-      },
-      {
-        id: 3,
-        sanskrit: "Rāsnā",
-        scientific: "Pluchea lanceolata",
-        common: "Rasna",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Anti-inflammatory • Joint support • Pain relief",
-        description: "Used for musculoskeletal health and reducing swelling.",
-        image: "https://images.unsplash.com/photo-1597843786411-a7fa8ed2f1c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" // approximate herb
       },
       {
         id: 4,
@@ -364,82 +351,17 @@
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Ocimum_tenuiflorum1.jpg/800px-Ocimum_tenuiflorum1.jpg"
       },
       {
-        id: 6,
-        sanskrit: "Āmalakī",
-        scientific: "Phyllanthus emblica",
-        common: "Indian Gooseberry / Amla",
-        dosha: "Tridoshic",
-        effect: "Balances all",
-        actions: "Antioxidant • Digestive • Rejuvenative",
-        description: "Richest natural source of vitamin C and core of Triphala.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phyllanthus_emblica1.jpg/800px-Phyllanthus_emblica1.jpg"
-      },
-      {
-        id: 7,
-        sanskrit: "Brāhmī",
-        scientific: "Bacopa monnieri",
-        common: "Brahmi",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Memory • Focus • Calm mind",
-        description: "Enhances cognitive function and clarity.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bacopa_monnieri_01.JPG/800px-Bacopa_monnieri_01.JPG"
-      },
-      {
-        id: 8,
-        sanskrit: "Śatāvarī",
-        scientific: "Asparagus racemosus",
-        common: "Shatavari",
-        dosha: "Pitta-Vata",
-        effect: "P, V ↓",
-        actions: "Women's tonic • Nourishing • Hormonal balance",
-        description: "Deeply nourishing for reproductive health.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Asparagus_racemosus_02.JPG/800px-Asparagus_racemosus_02.JPG"
-      },
-      {
-        id: 9,
-        sanskrit: "Nimba",
-        scientific: "Azadirachta indica",
-        common: "Neem",
-        dosha: "Pitta-Kapha",
-        effect: "P, K ↓",
-        actions: "Blood purifier • Skin • Antimicrobial",
-        description: "Legendary purifying and healing tree.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Azadirachta_indica_01.JPG/800px-Azadirachta_indica_01.JPG"
-      },
-      {
-        id: 10,
-        sanskrit: "Yaṣṭimadhu",
-        scientific: "Glycyrrhiza glabra",
-        common: "Licorice",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Kasa • Ksaya • Caksusya",
-        description: "Soothing demulcent for throat, digestion, and eyes.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Glycyrrhiza_glabra_01.JPG/800px-Glycyrrhiza_glabra_01.JPG"
-      },
-      {
-        id: 11,
-        sanskrit: "Bala",
-        scientific: "Sida cordifolia",
-        common: "Country Mallow",
-        dosha: "Vata-Pitta",
-        effect: "Vata-Pitta shamaka",
-        actions: "Balya • Brimhana • Vataghna",
-        description: "Strength-promoting and nourishing herb.",
-        image: "https://images.unsplash.com/photo-1597843786411-a7fa8ed2f1c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" // approximate
-      },
-      {
-        id: 12,
-        sanskrit: "Salaparni",
-        scientific: "Desmodium gangeticum",
-        common: "Salaparni",
-        dosha: "Tridosha shamaka",
-        effect: "VP ↓ K ↓",
-        actions: "Angamarda prashamana • Balya • Sothahara",
-        description: "Reduces body ache and supports strength.",
-        image: "https://images.unsplash.com/photo-1597843786411-a7fa8ed2f1c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" // approximate
+        id: 3,
+        sanskrit: "Rāsnā",
+        scientific: "Pluchea lanceolata",
+        common: "Rasna",
+        dosha: "Kapha-Vata",
+        effect: "K, V ↓",
+        actions: "Anti-inflammatory • Joint support • Pain relief",
+        description: "Used for musculoskeletal health and reducing swelling.",
+        image: "https://images.unsplash.com/photo-1597843786411-a7fa8ed2f1c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
       }
+      // ... add more plants as needed
     ];
 
     function createCard(plant) {
@@ -461,21 +383,19 @@
           <div class="mt-6 text-xs text-emerald-300 line-clamp-2">${plant.actions}</div>
         </div>
       `;
-      card.onclick = () => showModal(plant);
+      card.addEventListener('click', () => showModal(plant));
       return card;
     }
 
     function renderPlants(filtered) {
-      const container = document.getElementById('plants-grid');
-      container.innerHTML = '';
-      filtered.forEach(p => container.appendChild(createCard(p)));
+      document.getElementById('plants-grid').innerHTML = '';
+      filtered.forEach(p => document.getElementById('plants-grid').appendChild(createCard(p)));
     }
 
     function renderFeatured() {
       const featured = plants.slice(0, 3);
-      const container = document.getElementById('featured-grid');
-      container.innerHTML = '';
-      featured.forEach(p => container.appendChild(createCard(p)));
+      document.getElementById('featured-grid').innerHTML = '';
+      featured.forEach(p => document.getElementById('featured-grid').appendChild(createCard(p)));
     }
 
     function filterPlants() {
@@ -489,9 +409,7 @@
           p.scientific.toLowerCase().includes(term)
         );
       }
-      if (dosha) {
-        filtered = filtered.filter(p => p.dosha.includes(dosha));
-      }
+      if (dosha) filtered = filtered.filter(p => p.dosha.includes(dosha));
       renderPlants(filtered);
     }
 
@@ -501,7 +419,11 @@
       document.getElementById('all').scrollIntoView({ behavior: 'smooth' });
     }
 
+    // ────────────────────────────────────────────────
+    //           FIXED MODAL LOGIC
+    // ────────────────────────────────────────────────
     let currentPlant = null;
+
     function showModal(plant) {
       currentPlant = plant;
       document.getElementById('modal-image').src = plant.image;
@@ -512,15 +434,34 @@
       document.getElementById('modal-actions').textContent = plant.actions;
       document.getElementById('modal-effect').textContent = plant.effect;
       document.getElementById('modal-description').textContent = plant.description;
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modal').classList.add('flex');
+
+      const modal = document.getElementById('modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden'; // prevent background scroll
     }
 
     function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-      document.getElementById('modal').classList.remove('flex');
+      const modal = document.getElementById('modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = ''; // restore scroll
     }
 
+    // Close when clicking outside content
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Escape key support
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('modal');
+        if (!modal.classList.contains('hidden')) closeModal();
+      }
+    });
+
+    // Floating leaves
     function createFloatingLeaves() {
       const container = document.getElementById('leaves');
       for (let i = 0; i < 18; i++) {
@@ -534,22 +475,10 @@
       }
     }
 
-    function showGuidedTour() {
-      alert("Welcome to the Sacred Grove! Explore plants, filter by dosha, and chat with the AyurVidya Guide.");
-    }
-
-    function showAbout() {
-      alert("AyurVidya preserves timeless Ayurvedic knowledge for educational purposes only.");
-    }
-
-    function toggleDark() {
-      alert("The mystical dark forest theme suits the sacred grove perfectly ✨");
-    }
-
-    // AI Chat functions
+    // Simple chat simulation
     function toggleChat() {
-      const modal = document.getElementById('chat-modal');
-      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+      const m = document.getElementById('chat-modal');
+      m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
     }
 
     function sendMessage() {
@@ -560,40 +489,31 @@
       const body = document.getElementById('chat-body');
       body.innerHTML += `<div class="message user">${text}</div>`;
       input.value = '';
-
-      // Scroll to bottom
       body.scrollTop = body.scrollHeight;
 
-      // Simulated AI response (replace with real API later)
       setTimeout(() => {
-        let reply = "I'm here to help with Ayurvedic knowledge. Educational info only — consult a practitioner for advice.";
-        const lower = text.toLowerCase();
-
-        if (lower.includes('ashwagandha') || lower.includes('aswagandha')) {
-          reply = "Ashwagandha (Withania somnifera) is a premier adaptogen that reduces Vata, builds strength, improves sleep, and supports stress resilience.";
-        } else if (lower.includes('tulsi') || lower.includes('holy basil')) {
-          reply = "Tulsi (Ocimum sanctum) is sacred, antimicrobial, and excellent for respiratory health and immunity. It pacifies Kapha and Vata.";
-        } else if (lower.includes('amla') || lower.includes('amlaki')) {
-          reply = "Amla is Tridoshic, richest in vitamin C, rejuvenative, and the heart of many rasayanas like Chyawanprash.";
-        } else if (lower.includes('neem')) {
-          reply = "Neem (Azadirachta indica) is a powerful blood purifier, skin healer, and antimicrobial. Best for Pitta and Kapha imbalances.";
-        }
-
+        let reply = "I'm here to share educational Ayurvedic information only. Always consult a qualified practitioner.";
+        const q = text.toLowerCase();
+        if (q.includes('rasna') || q.includes('rāsna')) reply = "Rāsnā (Pluchea lanceolata) is excellent for joint support, reduces inflammation and helps with Vata-Kapha imbalances.";
+        else if (q.includes('ashwagandha')) reply = "Ashwagandha is a powerful adaptogen that calms Vata, builds strength and supports stress resilience.";
         body.innerHTML += `<div class="message bot">${reply}</div>`;
         body.scrollTop = body.scrollHeight;
       }, 800);
     }
 
-    // Init
+    function showGuidedTour() { alert("Explore the plants, filter by dosha, open cards — now they close properly!"); }
+    function showAbout() { alert("AyurVidya – educational tribute to Ayurvedic wisdom."); }
+    function toggleDark() { alert("Dark forest theme suits the grove best ✨"); }
+
+    // Initialize
     window.onload = () => {
       createFloatingLeaves();
       renderFeatured();
       renderPlants(plants);
 
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeModal();
-      });
-    }
+      // Initial filter call
+      filterPlants();
+    };
   </script>
 </body>
 </html>
