@@ -1,126 +1,137 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" id="app">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AyurVidya • Sacred Grove</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
 
     :root {
       --emerald: #10b981;
       --gold: #d4af37;
-      --bg: #0f172a;
-      --text: #f1f5f9;
-      --card: rgba(255,255,255,0.07);
-    }
-
-    [data-theme="light"] {
-      --bg: #f8fafc;
-      --text: #0f172a;
-      --card: rgba(0,0,0,0.05);
-      --emerald: #059669;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.5s, color 0.5s;
+      transition: background-color 0.4s, color 0.4s;
     }
 
-    .heading-font { font-family: 'Playfair Display', serif; }
+    .heading-font {
+      font-family: 'Playfair Display', serif;
+    }
 
     .hero-bg {
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1448376561459-dbe8868fa34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
-    }
-
-    [data-theme="light"] .hero-bg {
-      background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.3)), url('https://images.unsplash.com/photo-1508615263227-c5fc0e877809?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+      background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1508615263227-c5fc0e877809?auto=format&fit=crop&q=80');
+      background-size: cover;
+      background-position: center;
     }
 
     .glass {
-      background: var(--card);
+      background: rgba(255,255,255,0.08);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      transition: all 0.3s;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    [data-theme="light"] .glass { border-color: rgba(0,0,0,0.1); }
-
     .plant-card {
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .plant-card:hover {
-      transform: translateY(-14px) scale(1.04);
-      box-shadow: 0 30px 60px -15px rgba(16,185,129,0.35);
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgba(16,185,129,0.4);
     }
 
     .leaf {
       position: absolute;
-      font-size: 1.8rem;
-      opacity: 0.12;
+      font-size: 1.5rem;
+      opacity: 0.15;
       pointer-events: none;
-      animation: float 40s linear infinite;
+      animation: float 25s linear infinite;
     }
 
     @keyframes float {
-      0% { transform: translateY(110vh) rotate(0deg); }
-      100% { transform: translateY(-110vh) rotate(720deg); }
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
     }
 
-    /* Modal & chat styles remain similar but refined */
-    #modal { transition: opacity 0.3s; }
-    .page { display: none; }
-    .page.active { display: block; }
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    [data-theme="light"] {
+      --tw-bg-opacity: 1;
+      background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+      color: #111827;
+    }
+
+    [data-theme="light"] .glass {
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.1);
+    }
+
+    [data-theme="light"] .text-zinc-200 {
+      color: #1f2937;
+    }
+
+    [data-theme="light"] .bg-zinc-950 {
+      background-color: #f3f4f6;
+    }
+
+    [data-theme="light"] .bg-black {
+      background-color: #e5e7eb;
+    }
   </style>
 </head>
-<body class="min-h-screen relative overflow-x-hidden">
+<body class="bg-zinc-950 text-zinc-200 min-h-screen" data-theme="dark">
 
   <!-- Floating leaves -->
   <div id="leaves" class="fixed inset-0 pointer-events-none z-0"></div>
 
   <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 glass border-b border-emerald-900/30">
+  <nav class="fixed top-0 w-full z-50 glass border-b border-emerald-900">
     <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-leaf text-3xl text-emerald-500"></i>
-        <span class="heading-font text-3xl font-bold tracking-tight">AyurVidya</span>
+        <span class="heading-font text-3xl font-bold tracking-tight text-white">AyurVidya</span>
       </div>
-      <div class="flex items-center gap-10 text-sm font-medium">
-        <button onclick="navigate('home')" class="hover:text-emerald-400 transition">Welcome</button>
-        <button onclick="navigate('encyclopedia')" class="hover:text-emerald-400 transition">Encyclopedia</button>
+      <div class="flex items-center gap-8 text-sm font-medium">
+        <button onclick="navigateTo('home')" class="hover:text-emerald-400 transition">Welcome</button>
+        <button onclick="navigateTo('encyclopedia')" class="hover:text-emerald-400 transition">Encyclopedia</button>
         <button onclick="showAbout()" class="hover:text-emerald-400 transition">Wisdom</button>
-        <button id="theme-toggle" onclick="toggleTheme()" 
-                class="px-5 py-2.5 bg-emerald-600/90 hover:bg-emerald-500 rounded-2xl font-medium text-sm transition flex items-center gap-2 shadow-md">
+        <button id="themeBtn" onclick="toggleTheme()" 
+                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium text-sm transition flex items-center gap-2">
           <i class="fa-solid fa-moon"></i> Dark Grove
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- Page: Home / Welcome -->
+  <!-- Home Page -->
   <div id="home" class="page active pt-24">
 
     <!-- Hero -->
-    <header class="hero-bg min-h-screen flex items-center relative">
-      <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
-        <h1 class="heading-font text-7xl md:text-9xl font-bold text-white mb-6 tracking-tighter drop-shadow-2xl">
-          Sacred Grove
+    <header class="hero-bg min-h-screen flex items-center">
+      <div class="max-w-5xl mx-auto px-6 text-center">
+        <h1 class="heading-font text-7xl md:text-8xl font-bold text-white mb-6 tracking-tighter">
+          The Sacred Grove
         </h1>
-        <p class="text-2xl md:text-3xl text-emerald-100/90 max-w-3xl mx-auto mb-12 leading-relaxed">
-          Timeless Ayurvedic wisdom preserved in a living mystical forest
+        <p class="text-2xl text-emerald-100 max-w-2xl mx-auto mb-10">
+          Ancient Ayurvedic wisdom, preserved in a living digital forest
         </p>
-        <div class="flex flex-col sm:flex-row gap-6 justify-center">
-          <button onclick="navigate('encyclopedia')"
-                  class="px-12 py-6 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-3xl text-xl transition shadow-xl flex items-center justify-center gap-3">
-            <i class="fa-solid fa-seedling text-2xl"></i> Enter Encyclopedia
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button onclick="navigateTo('encyclopedia')"
+                  class="px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-3xl text-lg transition flex items-center justify-center gap-3">
+            <i class="fa-solid fa-seedling"></i> Enter the Grove
           </button>
           <button onclick="showGuidedTour()"
-                  class="px-12 py-6 border-2 border-emerald-400/70 text-emerald-300 hover:bg-emerald-400/20 hover:text-white font-semibold rounded-3xl text-xl transition">
+                  class="px-10 py-5 border-2 border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-black font-semibold rounded-3xl text-lg transition">
             Guided Journey
           </button>
         </div>
@@ -128,37 +139,42 @@
     </header>
 
     <!-- Featured -->
-    <section class="py-24">
+    <section class="py-24 bg-zinc-900">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="heading-font text-6xl text-center mb-16">Guardians of the Forest</h2>
-        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
+        <h2 class="heading-font text-5xl text-center mb-12">Guardians of the Forest</h2>
+        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
       </div>
     </section>
 
     <!-- Doshas -->
-    <section class="py-24 bg-black/30">
+    <section class="py-24 bg-zinc-950">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="heading-font text-6xl text-center mb-16">Balance Your Nature</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div onclick="navigate('encyclopedia'); filterByDosha('All')" class="glass rounded-3xl p-10 text-center cursor-pointer hover:border-emerald-500/50 border transition group hover:scale-105">
-            <div class="text-7xl mb-6">🌳</div>
-            <h3 class="text-3xl font-semibold">All</h3>
+        <h2 class="heading-font text-5xl text-center mb-12">Balance Your Nature</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
+            <div class="text-6xl mb-4">🌳</div>
+            <h3 class="text-2xl font-semibold">All Plants</h3>
           </div>
-          <!-- Vata, Pitta, Kapha similar - omitted for brevity -->
+          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('Vata')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
+            <div class="text-6xl mb-4">🍂</div>
+            <h3 class="text-2xl font-semibold text-amber-300">Vata</h3>
+          </div>
+          <!-- Add Pitta and Kapha similarly -->
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Page: Encyclopedia -->
+  <!-- Encyclopedia Page -->
   <div id="encyclopedia" class="page pt-24 hidden">
-    <section class="py-20">
+    <section class="py-24 bg-zinc-900">
       <div class="max-w-7xl mx-auto px-6">
-        <h1 class="heading-font text-7xl text-center mb-12">The Living Library</h1>
-        <div class="flex flex-col md:flex-row gap-6 justify-center mb-16">
-          <input id="search" type="text" placeholder="Search plant or remedy..." onkeyup="filterPlants()"
-                 class="glass px-8 py-5 rounded-3xl text-lg w-full max-w-xl focus:ring-2 focus:ring-emerald-500 outline-none"/>
-          <select id="doshaFilter" onchange="filterPlants()" class="glass px-8 py-5 rounded-3xl text-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+        <h2 class="heading-font text-5xl text-center mb-12">The Living Library</h2>
+        <div class="flex flex-col md:flex-row gap-4 justify-center mb-12">
+          <input id="search" type="text" placeholder="Search by name..." oninput="filterPlants()"
+                 class="glass px-6 py-4 rounded-3xl text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full max-w-md">
+          <select id="doshaFilter" onchange="filterPlants()" 
+                  class="glass px-6 py-4 rounded-3xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <option value="">All Doshas</option>
             <option value="Vata">Vata</option>
             <option value="Pitta">Pitta</option>
@@ -166,120 +182,159 @@
             <option value="Tridoshic">Tridoshic</option>
           </select>
         </div>
-        <div id="plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10"></div>
-        <div id="no-results" class="hidden text-center py-20 text-2xl text-zinc-400">No remedy or plant found matching your search.</div>
+        <div id="plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+        <div id="no-results" class="hidden text-center py-20 text-2xl text-zinc-400">
+          No remedy or plant found matching your search.
+        </div>
       </div>
     </section>
   </div>
 
-  <!-- Modal (shared across pages) -->
-  <div id="modal" class="hidden fixed inset-0 bg-black/85 flex items-center justify-center z-[100] p-4 md:p-6">
-    <div class="glass max-w-3xl w-full rounded-3xl overflow-hidden relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeModal()" 
-              class="absolute top-4 right-4 z-20 w-14 h-14 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-3xl text-white shadow-xl transition">
-        ✕
-      </button>
-      <img id="modal-image" class="w-full h-80 md:h-96 object-cover" alt="">
-      <div class="p-8 md:p-12">
-        <!-- content filled by JS -->
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6">
+    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden">
+      <div class="relative">
+        <img id="modal-image" class="w-full h-80 object-cover" alt="">
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-12 h-12 bg-black/60 hover:bg-black/80 rounded-full text-2xl text-white flex items-center justify-center">
+          ✕
+        </button>
+      </div>
+      <div class="p-8">
+        <div id="modal-content"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // ── Theme Toggle ────────────────────────────────────────
+    // Theme toggle
     function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
+      html.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
 
-      const btn = document.getElementById('theme-toggle');
-      if (next === 'light') {
-        btn.innerHTML = '<i class="fa-solid fa-sun"></i> Light Grove';
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-moon"></i> Dark Grove';
-      }
+      const btn = document.getElementById('themeBtn');
+      btn.innerHTML = next === 'light' 
+        ? '<i class="fa-solid fa-sun"></i> Light Grove' 
+        : '<i class="fa-solid fa-moon"></i> Dark Grove';
     }
 
     // Load saved theme
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    toggleTheme(); // set initial button text
+    toggleTheme();  // update button text
 
-    // ── Navigation ──────────────────────────────────────────
-    function navigate(pageId) {
+    // Navigation
+    function navigateTo(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      window.scrollTo(0, 0);
+      document.getElementById(page).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      history.pushState({}, '', `#${page}`);
     }
 
-    // ── Plant Data (updated images) ─────────────────────────
+    // Handle direct links / back button
+    window.addEventListener('popstate', () => {
+      const hash = location.hash.replace('#', '') || 'home';
+      navigateTo(hash);
+    });
+
+    // Initial page from hash or default to home
+    const initialPage = location.hash.replace('#', '') || 'home';
+    navigateTo(initialPage);
+
+    // Plant data (expand as needed)
     const plants = [
-      {
-        sanskrit: "Maṇjiṣṭhā",
-        scientific: "Rubia cordifolia",
-        common: "Indian Madder",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Blood purifier • Skin healer • Lymphatic support",
-        description: "Queen of blood-purifying herbs in Ayurveda.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rubia_cordifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-129.jpg/800px-Rubia_cordifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-129.jpg"
-      },
-      {
-        sanskrit: "Aśvagandhā",
-        scientific: "Withania somnifera",
-        common: "Ashwagandha",
-        dosha: "Vata",
-        effect: "V ↓ (Tridoshic)",
-        actions: "Adaptogen • Vitality • Stress relief",
-        description: "Renowned strength-builder and calmative.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Withania_somnifera1.jpg/800px-Withania_somnifera1.jpg"
-      },
-      {
-        sanskrit: "Tulasī",
-        scientific: "Ocimum sanctum",
-        common: "Holy Basil",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Immunity • Respiratory • Sacred herb",
-        description: "Most revered plant in Indian tradition.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Ocimum_tenuiflorum.jpg/800px-Ocimum_tenuiflorum.jpg"
-      },
-      {
-        sanskrit: "Rāsnā",
-        scientific: "Pluchea lanceolata",
-        common: "Rasna",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Anti-inflammatory • Joint support • Pain relief",
-        description: "Valuable for musculoskeletal comfort.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pluchea_lanceolata.jpg/800px-Pluchea_lanceolata.jpg"  // using closest reliable
-      }
-      // Add more as needed
+      { sanskrit: "Maṇjiṣṭhā", common: "Indian Madder", dosha: "Kapha-Pitta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Rubia_cordifolia_01.jpg/800px-Rubia_cordifolia_01.jpg", description: "Blood purifier and skin healer." },
+      { sanskrit: "Aśvagandhā", common: "Ashwagandha", dosha: "Vata", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Withania_somnifera1.jpg/800px-Withania_somnifera1.jpg", description: "Adaptogen for stress and vitality." },
+      // Add more...
     ];
 
-    // Render functions, filterPlants(), showModal(), closeModal(), etc. remain similar
-    // ... (omitted for brevity - use logic from previous versions, add no-results display)
+    function createCard(plant) {
+      const div = document.createElement('div');
+      div.className = 'plant-card glass rounded-3xl overflow-hidden cursor-pointer';
+      div.innerHTML = `
+        <img src="${plant.image}" class="w-full h-56 object-cover">
+        <div class="p-6">
+          <div class="heading-font text-2xl text-white">${plant.sanskrit}</div>
+          <div class="text-zinc-400">${plant.common}</div>
+          <div class="text-emerald-400 text-sm mt-2">${plant.dosha}</div>
+        </div>
+      `;
+      div.onclick = () => {
+        document.getElementById('modal-image').src = plant.image;
+        document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-4xl">${plant.sanskrit}</h2><p class="text-xl mt-2">${plant.description}</p>`;
+        document.getElementById('modal').classList.remove('hidden');
+      };
+      return div;
+    }
+
+    function renderPlants(list, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      list.forEach(p => container.appendChild(createCard(p)));
+    }
 
     function filterPlants() {
-      // ... existing filter logic ...
-      const results = /* filtered array */;
+      const term = document.getElementById('search')?.value?.toLowerCase() || '';
+      const dosha = document.getElementById('doshaFilter')?.value || '';
+      let filtered = plants.filter(p => {
+        const matchName = p.sanskrit.toLowerCase().includes(term) || p.common.toLowerCase().includes(term);
+        const matchDosha = !dosha || p.dosha.includes(dosha);
+        return matchName && matchDosha;
+      });
+
       const grid = document.getElementById('plants-grid');
       const noRes = document.getElementById('no-results');
-      grid.innerHTML = '';
-      if (results.length === 0) {
+      renderPlants(filtered, 'plants-grid');
+
+      if (filtered.length === 0 && (term || dosha)) {
         noRes.classList.remove('hidden');
       } else {
         noRes.classList.add('hidden');
-        results.forEach(p => grid.appendChild(createCard(p)));
       }
     }
 
+    function setDoshaFilter(value) {
+      const select = document.getElementById('doshaFilter');
+      if (select) {
+        select.value = value;
+        filterPlants();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    document.getElementById('modal')?.addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function createFloatingLeaves() {
+      const container = document.getElementById('leaves');
+      for (let i = 0; i < 15; i++) {
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        leaf.textContent = ['🍃','🌿','🌱'][Math.floor(Math.random()*3)];
+        leaf.style.left = Math.random()*100 + 'vw';
+        leaf.style.animationDelay = -Math.random()*20 + 's';
+        container.appendChild(leaf);
+      }
+    }
+
+    function showAbout() { alert("AyurVidya preserves ancient Ayurvedic knowledge for educational purposes only."); }
+    function showGuidedTour() { alert("Welcome to the grove! Explore plants and balance your doshas."); }
+
     // Init
     window.onload = () => {
-      // create leaves, render featured, etc.
-      navigate('home'); // start on home
+      createFloatingLeaves();
+      renderPlants(plants.slice(0,3), 'featured-grid');
+      filterPlants();
     };
   </script>
 </body>
