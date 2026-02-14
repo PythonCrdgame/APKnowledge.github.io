@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyurVidya • Sacred Grove</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+    :root {
+      --emerald: #10b981;
+      --gold: #d4af37;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .heading-font {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero-bg {
+      background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://picsum.photos/id/1015/2000/1200');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .plant-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .plant-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgb(16 185 129 / 0.4);
+    }
+
+    .leaf {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.15;
+      pointer-events: none;
+      animation: float 25s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 overflow-x-hidden">
+
+  <!-- Floating leaves -->
+  <div id="leaves" class="fixed inset-0 pointer-events-none z-0"></div>
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full z-50 glass border-b border-emerald-900">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-leaf text-3xl text-emerald-500"></i>
+        <span class="heading-font text-3xl font-bold tracking-tight text-white">AyurVidya</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="#discover" class="hover:text-emerald-400 transition">Discover</a>
+        <a href="#doshas" class="hover:text-emerald-400 transition">Doshas</a>
+        <a href="#all" class="hover:text-emerald-400 transition">All Plants</a>
+        <a href="#" onclick="showAbout()" class="hover:text-emerald-400 transition">Wisdom</a>
+      </div>
+      <button onclick="toggleDark()" 
+              class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium text-sm transition flex items-center gap-2">
+        <i class="fa-solid fa-moon"></i>
+        <span>Light Grove</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero-bg min-h-screen flex items-center relative">
+    <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+      <h1 class="heading-font text-7xl md:text-8xl font-bold text-white mb-6 tracking-tighter">
+        The Sacred Grove
+      </h1>
+      <p class="text-2xl text-emerald-100 max-w-2xl mx-auto mb-10">
+        Ancient Ayurvedic wisdom, preserved in a living digital forest
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="document.getElementById('all').scrollIntoView({behavior:'smooth'})"
+                class="px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-3xl text-lg transition flex items-center justify-center gap-3">
+          <i class="fa-solid fa-seedling"></i>
+          Enter the Grove
+        </button>
+        <button onclick="showGuidedTour()"
+                class="px-10 py-5 border-2 border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-black font-semibold rounded-3xl text-lg transition">
+          Guided Journey
+        </button>
+      </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
+      <div class="text-emerald-300 text-xs tracking-widest mb-2">SCROLL TO EXPLORE</div>
+      <i class="fa-solid fa-chevron-down animate-bounce text-2xl"></i>
+    </div>
+  </header>
+
+  <!-- Featured -->
+  <section id="discover" class="py-24 bg-zinc-900 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <span class="text-emerald-400 text-sm font-medium tracking-widest">FEATURED DRAVYAS</span>
+          <h2 class="heading-font text-5xl text-white">Guardians of the Forest</h2>
+        </div>
+        <a href="#all" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-2 text-sm font-medium">
+          View all <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- Dosha Categories -->
+  <section id="doshas" class="py-24 bg-zinc-950">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="heading-font text-5xl text-center mb-4">Balance Your Nature</h2>
+      <p class="text-center text-zinc-400 max-w-md mx-auto mb-16">Choose a dosha to see plants that bring harmony</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div onclick="filterByDosha('All')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border border-transparent transition group">
+          <div class="text-6xl mb-4">🌳</div>
+          <h3 class="text-2xl font-semibold mb-1">All Plants</h3>
+          <p class="text-zinc-400 text-sm">The entire sacred grove</p>
+        </div>
+        <div onclick="filterByDosha('Vata')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border border-transparent transition group">
+          <div class="text-6xl mb-4">🍂</div>
+          <h3 class="text-2xl font-semibold mb-1 text-amber-300">Vata</h3>
+          <p class="text-zinc-400 text-sm">Grounding & nourishing</p>
+        </div>
+        <div onclick="filterByDosha('Pitta')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border border-transparent transition group">
+          <div class="text-6xl mb-4">🔥</div>
+          <h3 class="text-2xl font-semibold mb-1 text-red-300">Pitta</h3>
+          <p class="text-zinc-400 text-sm">Cooling & calming</p>
+        </div>
+        <div onclick="filterByDosha('Kapha')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border border-transparent transition group">
+          <div class="text-6xl mb-4">🌊</div>
+          <h3 class="text-2xl font-semibold mb-1 text-sky-300">Kapha</h3>
+          <p class="text-zinc-400 text-sm">Energizing & lightening</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- All Plants -->
+  <section id="all" class="py-24 bg-zinc-900">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row gap-6 mb-12 items-end">
+        <div class="flex-1">
+          <h2 class="heading-font text-5xl">The Living Library</h2>
+        </div>
+        <div class="flex gap-4">
+          <input id="search" 
+                 type="text" 
+                 placeholder="Search by name..." 
+                 onkeyup="filterPlants()"
+                 class="glass px-6 py-4 rounded-3xl text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-80">
+          
+          <select id="doshaFilter" onchange="filterPlants()" 
+                  class="glass px-6 py-4 rounded-3xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="">All Doshas</option>
+            <option value="Vata">Vata</option>
+            <option value="Pitta">Pitta</option>
+            <option value="Kapha">Kapha</option>
+            <option value="Tridoshic">Tridoshic</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black py-16 border-t border-emerald-900">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <i class="fa-solid fa-leaf text-4xl text-emerald-500"></i>
+        <span class="heading-font text-4xl">AyurVidya</span>
+      </div>
+      <p class="text-zinc-500 max-w-md mx-auto">
+        A digital sanctuary preserving the timeless knowledge of Ayurveda
+      </p>
+      <p class="text-xs text-zinc-600 mt-12">© 2026 • Built as a tribute to ancient wisdom</p>
+    </div>
+  </footer>
+
+  <!-- Plant Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-6">
+    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden">
+      <div class="relative">
+        <img id="modal-image" class="w-full h-80 object-cover" alt="">
+        <button onclick="closeModal()" 
+                class="absolute top-6 right-6 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-2xl flex items-center justify-center text-xl">
+          ✕
+        </button>
+      </div>
+      <div class="p-10">
+        <div id="modal-dosha" class="inline-flex items-center gap-2 text-xs font-medium px-4 py-1.5 bg-emerald-900 text-emerald-300 rounded-3xl"></div>
+        <h2 id="modal-sanskrit" class="heading-font text-5xl mt-4 mb-1"></h2>
+        <p id="modal-scientific" class="text-emerald-300 font-medium"></p>
+        <p id="modal-common" class="text-2xl text-zinc-400 mt-1"></p>
+
+        <div class="my-8 border-t border-emerald-900 pt-8 grid grid-cols-2 gap-8 text-sm">
+          <div>
+            <div class="text-zinc-500 mb-2">KEY ACTIONS</div>
+            <div id="modal-actions" class="text-emerald-200"></div>
+          </div>
+          <div>
+            <div class="text-zinc-500 mb-2">DOSHA EFFECT</div>
+            <div id="modal-effect" class="font-mono text-lg"></div>
+          </div>
+        </div>
+
+        <div id="modal-description" class="text-zinc-300 leading-relaxed"></div>
+
+        <div class="mt-10 flex gap-4">
+          <button onclick="closeModal()" 
+                  class="flex-1 py-4 border border-emerald-700 hover:border-emerald-500 rounded-3xl font-medium transition">
+            Close
+          </button>
+          <button onclick="alert('Saved to your personal grove ✨ (demo)')"
+                  class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 text-black rounded-3xl font-medium transition">
+            Save to My Grove
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tailwind script
+    tailwind.config = {
+      content: [],
+      theme: {
+        extend: {}
+      }
+    }
+
+    // Plant data
+    const plants = [
+      {
+        id: 1,
+        sanskrit: "Maṇjiṣṭhā",
+        scientific: "Rubia cordifolia",
+        common: "Indian Madder",
+        dosha: "Kapha-Pitta",
+        effect: "K, P ↓",
+        actions: "Blood purifier • Skin healer • Lymphatic support",
+        description: "Known as the 'queen of herbs' for skin health. Manjishtha purifies the blood, clears complexion, and supports the body's natural detoxification pathways.",
+        image: "https://picsum.photos/seed/manjishtha/800/600"
+      },
+      {
+        id: 2,
+        sanskrit: "Drākṣā",
+        scientific: "Vitis vinifera",
+        common: "Grape",
+        dosha: "Vata-Pitta",
+        effect: "V, P ↓",
+        actions: "Rejuvenative • Eye tonic • Nourishing",
+        description: "Sweet and cooling, Draksha is a classical rasayana that nourishes all tissues, calms the mind, and supports healthy vision.",
+        image: "https://picsum.photos/seed/draksha/800/600"
+      },
+      {
+        id: 3,
+        sanskrit: "Rāsnā",
+        scientific: "Pluchea lanceolata",
+        common: "Rasna",
+        dosha: "Kapha-Vata",
+        effect: "K, V ↓",
+        actions: "Anti-inflammatory • Joint support • Pain relief",
+        description: "A powerful herb for musculoskeletal health. Rasna is traditionally used to reduce swelling and restore mobility.",
+        image: "https://picsum.photos/seed/rasna/800/600"
+      },
+      {
+        id: 4,
+        sanskrit: "Aśvagandhā",
+        scientific: "Withania somnifera",
+        common: "Ashwagandha",
+        dosha: "Vata",
+        effect: "V ↓ (balances all)",
+        actions: "Adaptogen • Vitality • Nervous system support",
+        description: "The ultimate stress-reliever and strength-builder of Ayurveda. Ashwagandha restores energy, improves sleep, and builds resilience.",
+        image: "https://picsum.photos/seed/ashwagandha/800/600"
+      },
+      {
+        id: 5,
+        sanskrit: "Tulasī",
+        scientific: "Ocimum sanctum",
+        common: "Holy Basil",
+        dosha: "Kapha-Vata",
+        effect: "K, V ↓",
+        actions: "Immunity • Respiratory health • Antimicrobial",
+        description: "The most sacred plant in India. Tulsi protects the body from environmental stress and purifies the air and mind.",
+        image: "https://picsum.photos/seed/tulsi/800/600"
+      },
+      {
+        id: 6,
+        sanskrit: "Āmalakī",
+        scientific: "Emblica officinalis",
+        common: "Indian Gooseberry",
+        dosha: "Tridoshic",
+        effect: "Balances all",
+        actions: "Antioxidant • Digestive • Rejuvenative",
+        description: "One of the richest sources of vitamin C in nature. Amla is the heart of Triphala and a true rasayana.",
+        image: "https://picsum.photos/seed/amla/800/600"
+      },
+      {
+        id: 7,
+        sanskrit: "Brāhmī",
+        scientific: "Bacopa monnieri",
+        common: "Brahmi",
+        dosha: "Vata-Pitta",
+        effect: "V, P ↓",
+        actions: "Memory • Focus • Calm mind",
+        description: "The herb of consciousness. Brahmi enhances cognitive function and brings clarity to the mind.",
+        image: "https://picsum.photos/seed/brahmi/800/600"
+      },
+      {
+        id: 8,
+        sanskrit: "Śatāvarī",
+        scientific: "Asparagus racemosus",
+        common: "Shatavari",
+        dosha: "Pitta-Vata",
+        effect: "P, V ↓",
+        actions: "Women's tonic • Nourishing • Hormonal balance",
+        description: "The queen of herbs for women. Shatavari deeply nourishes and supports reproductive health.",
+        image: "https://picsum.photos/seed/shatavari/800/600"
+      },
+      {
+        id: 9,
+        sanskrit: "Nimba",
+        scientific: "Azadirachta indica",
+        common: "Neem",
+        dosha: "Pitta-Kapha",
+        effect: "P, K ↓",
+        actions: "Blood purifier • Skin • Antimicrobial",
+        description: "Nature's pharmacy in a single tree. Neem is legendary for its purifying and healing properties.",
+        image: "https://picsum.photos/seed/neem/800/600"
+      }
+    ]
+
+    // Render cards
+    function createCard(plant) {
+      const card = document.createElement('div')
+      card.className = `plant-card glass rounded-3xl overflow-hidden cursor-pointer`
+      card.innerHTML = `
+        <img src="${plant.image}" class="w-full h-56 object-cover">
+        <div class="p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-emerald-400 text-xs font-medium">${plant.dosha}</div>
+              <div class="heading-font text-2xl text-white mt-1">${plant.sanskrit}</div>
+              <div class="text-zinc-400 text-sm">${plant.common}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-[10px] font-mono bg-zinc-800 px-3 py-1 rounded-2xl">${plant.effect}</div>
+            </div>
+          </div>
+          <div class="mt-6 text-xs text-emerald-300 line-clamp-2">${plant.actions}</div>
+        </div>
+      `
+      card.onclick = () => showModal(plant)
+      return card
+    }
+
+    function renderPlants(filteredPlants) {
+      const container = document.getElementById('plants-grid')
+      container.innerHTML = ''
+      filteredPlants.forEach(plant => {
+        container.appendChild(createCard(plant))
+      })
+    }
+
+    function renderFeatured() {
+      const featured = plants.slice(0, 3)
+      const container = document.getElementById('featured-grid')
+      container.innerHTML = ''
+      featured.forEach(plant => {
+        container.appendChild(createCard(plant))
+      })
+    }
+
+    // Filtering
+    function filterPlants() {
+      const searchTerm = document.getElementById('search').value.toLowerCase().trim()
+      const doshaFilter = document.getElementById('doshaFilter').value
+
+      let filtered = plants
+
+      if (searchTerm) {
+        filtered = filtered.filter(p => 
+          p.sanskrit.toLowerCase().includes(searchTerm) ||
+          p.common.toLowerCase().includes(searchTerm) ||
+          p.scientific.toLowerCase().includes(searchTerm)
+        )
+      }
+
+      if (doshaFilter) {
+        filtered = filtered.filter(p => p.dosha.includes(doshaFilter))
+      }
+
+      renderPlants(filtered)
+    }
+
+    function filterByDosha(dosha) {
+      document.getElementById('doshaFilter').value = dosha === 'All' ? '' : dosha
+      filterPlants()
+      document.getElementById('all').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    // Modal
+    let currentPlant = null
+
+    function showModal(plant) {
+      currentPlant = plant
+      document.getElementById('modal-image').src = plant.image
+      document.getElementById('modal-sanskrit').textContent = plant.sanskrit
+      document.getElementById('modal-scientific').textContent = plant.scientific
+      document.getElementById('modal-common').textContent = plant.common
+      document.getElementById('modal-dosha').innerHTML = `<i class="fa-solid fa-leaf"></i> ${plant.dosha}`
+      document.getElementById('modal-actions').textContent = plant.actions
+      document.getElementById('modal-effect').textContent = plant.effect
+      document.getElementById('modal-description').textContent = plant.description
+      document.getElementById('modal').classList.remove('hidden')
+      document.getElementById('modal').classList.add('flex')
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal')
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+    }
+
+    // Floating leaves background
+    function createFloatingLeaves() {
+      const container = document.getElementById('leaves')
+      for (let i = 0; i < 18; i++) {
+        const leaf = document.createElement('div')
+        leaf.className = 'leaf'
+        leaf.textContent = ['🍃','🌿','🪴','🌱'][Math.floor(Math.random()*4)]
+        leaf.style.left = Math.random() * 100 + 'vw'
+        leaf.style.animationDelay = '-' + Math.random() * 30 + 's'
+        leaf.style.animationDuration = (20 + Math.random() * 30) + 's'
+        container.appendChild(leaf)
+      }
+    }
+
+    function showGuidedTour() {
+      alert("🌿 Welcome to the Sacred Grove!\n\nThis is a beautiful, fully functional demo. Feel free to explore, search, filter, and open any plant card.\n\nEverything is saved locally in the browser.\n\nEnjoy your journey through Ayurvedic wisdom!")
+    }
+
+    function showAbout() {
+      alert("AyurVidya is a tribute to the ancient science of Ayurveda.\n\nAll data is for educational purposes.\n\nMade with love for the plants that heal us.")
+    }
+
+    function toggleDark() {
+      alert("Theme switch is a demo feature.\n\nThe current mystical dark forest theme is already perfect for this sacred grove ✨")
+    }
+
+    // Initialize
+    window.onload = () => {
+      createFloatingLeaves()
+      renderFeatured()
+      renderPlants(plants)
+
+      // Close modal on escape
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal()
+      })
+    }
+  </script>
+</body>
+</html>
