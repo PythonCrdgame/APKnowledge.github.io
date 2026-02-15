@@ -3,496 +3,328 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AyurVidya • Sacred Grove</title>
+  <title>AyurVidya — living tree of wisdom</title>
+  <!-- Tailwind + Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
-
-    :root {
-      --emerald: #10b981;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      transition: all 0.4s;
-    }
-
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+    * { transition: background-color 0.3s, border-color 0.2s; }
+    body { font-family: 'Inter', sans-serif; }
     .heading-font { font-family: 'Playfair Display', serif; }
 
     .hero-bg {
-      background-image: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1508615263227-c5fc0e877809?auto=format&fit=crop&q=80');
+      background-image: linear-gradient(135deg, rgba(2,20,12,0.85) 0%, rgba(5,40,25,0.9) 100%), 
+      url('https://images.pexels.com/photos/158028/bellingrath-gardens-alabama-landscape-scenic-158028.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
       background-size: cover;
-      background-position: center;
+      background-position: center 30%;
     }
 
     .glass {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(20, 40, 30, 0.25);
+      backdrop-filter: blur(14px) saturate(180%);
+      border: 1px solid rgba(110, 231, 183, 0.15);
     }
 
     .plant-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+      cursor: pointer;
     }
-
     .plant-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 25px 50px -12px rgba(16,185,129,0.4);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 30px 40px -20px #0f766e;
+      border-color: #10b981;
     }
 
-    .leaf {
+    /* floating leaf animation */
+    .floating-leaf {
       position: absolute;
-      font-size: 1.5rem;
-      opacity: 0.15;
+      font-size: 2.2rem;
+      opacity: 0.2;
       pointer-events: none;
-      animation: float 25s linear infinite;
+      animation: drift 28s linear infinite;
+      z-index: 0;
+    }
+    @keyframes drift {
+      0% { transform: translateY(110vh) rotate(0deg) scale(0.8); }
+      100% { transform: translateY(-20vh) rotate(320deg) scale(1.4); }
     }
 
-    @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); }
-      100% { transform: translateY(-100vh) rotate(360deg); }
-    }
-
+    /* page switch */
     .page { display: none; }
     .page.active { display: block; }
 
+    /* theme variables */
+    :root, [data-theme="dark"] {
+      background: #0c0f0e;
+      color: #e2e8f0;
+    }
+    [data-theme="dark"] .glass {
+      background: rgba(10, 25, 18, 0.6);
+      border-color: #2b5e4b;
+    }
     [data-theme="light"] {
-      background: #f8fafc;
-      color: #111827;
+      background: #f6fbf9;
+      color: #1a2e25;
     }
-
     [data-theme="light"] .glass {
-      background: rgba(0,0,0,0.05);
-      border-color: rgba(0,0,0,0.1);
+      background: rgba(220, 250, 235, 0.7);
+      border-color: #9ecfbb;
     }
-
-    [data-theme="light"] .bg-zinc-950 { background: #f3f4f6; }
-    [data-theme="light"] .text-zinc-200 { color: #1f2937; }
+    [data-theme="light"] .bg-zinc-900 { background: #e2efe8; }
+    [data-theme="light"] .text-zinc-200 { color: #16332a; }
+    [data-theme="light"] .text-zinc-400 { color: #2b5a4a; }
+    [data-theme="light"] .bg-zinc-950 { background: #d6eae0; }
+    [data-theme="light"] button.bg-emerald-600 { background: #059669; color: white; }
   </style>
 </head>
-<body class="bg-zinc-950 text-zinc-200 min-h-screen" data-theme="dark">
+<body data-theme="dark" class="min-h-screen">
 
-  <!-- Floating leaves -->
-  <div id="leaves" class="fixed inset-0 pointer-events-none z-0"></div>
+  <!-- floating forest spirits (leaves) -->
+  <div id="leaf-canvas" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
 
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 glass border-b border-emerald-900/50">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+  <!-- fixed navbar -->
+  <nav class="fixed top-0 w-full z-50 glass border-b border-emerald-800/40 shadow-xl">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-leaf text-3xl text-emerald-500"></i>
-        <span class="heading-font text-3xl font-bold">AyurVidya</span>
+        <i class="fa-solid fa-tree text-3xl text-emerald-400"></i>
+        <span class="heading-font text-3xl font-bold tracking-tight">AyurVidya</span>
       </div>
-      <div class="flex gap-8 items-center">
-        <button onclick="navigateTo('home')" class="hover:text-emerald-400 transition">Welcome</button>
-        <button onclick="navigateTo('encyclopedia')" class="hover:text-emerald-400 transition">Encyclopedia</button>
-        <button onclick="showAbout()" class="hover:text-emerald-400 transition">Wisdom</button>
-        <button id="theme-toggle" onclick="toggleTheme()" 
-                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium text-sm transition flex items-center gap-2">
-          <i class="fa-solid fa-moon"></i> Dark Grove
+      <div class="flex gap-8 items-center text-sm font-medium">
+        <button onclick="navigateTo('home')" class="hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-leaf"></i>Home</button>
+        <button onclick="navigateTo('encyclopedia')" class="hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-book-open"></i>Library</button>
+        <button onclick="showWisdom()" class="hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-scroll"></i>Wisdom</button>
+        <button id="theme-toggle" onclick="toggleTheme()" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 rounded-2xl text-white text-sm flex items-center gap-2 shadow-md">
+          <i class="fa-solid fa-moon"></i> <span>dark</span>
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- Home Page -->
-  <div id="home" class="page active pt-24">
+  <!-- HOME page -->
+  <div id="home" class="page active pt-20">
 
-    <!-- Hero -->
-    <header class="hero-bg min-h-screen flex items-center">
-      <div class="max-w-5xl mx-auto px-6 text-center">
-        <h1 class="heading-font text-7xl md:text-8xl font-bold text-white mb-6 tracking-tighter">
-          The Sacred Grove
-        </h1>
-        <p class="text-2xl text-emerald-100 max-w-2xl mx-auto mb-10">
-          Ancient Ayurvedic wisdom, preserved in a living digital forest
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button onclick="navigateTo('encyclopedia')"
-                  class="px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-3xl text-lg transition flex items-center justify-center gap-3">
-            <i class="fa-solid fa-seedling"></i> Enter the Grove
-          </button>
-          <button onclick="showGuidedTour()"
-                  class="px-10 py-5 border-2 border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-black font-semibold rounded-3xl text-lg transition">
-            Guided Journey
-          </button>
+    <!-- hero -->
+    <header class="hero-bg min-h-[90vh] flex items-center justify-center">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h1 class="heading-font text-6xl md:text-8xl font-bold text-white drop-2xl mb-6">Sacred grove</h1>
+        <p class="text-2xl text-emerald-50/90 max-w-2xl mx-auto mb-10">Where 5,000 years of ayurveda meet the digital forest</p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button onclick="navigateTo('encyclopedia')" class="px-10 py-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full text-lg font-semibold shadow-xl flex items-center gap-3"><i class="fa-solid fa-magnifying-glass"></i> explore herbs</button>
+          <button onclick="startBreathingExercise()" class="px-10 py-5 border-2 border-emerald-300 text-emerald-100 hover:bg-emerald-800/50 rounded-full text-lg font-semibold flex items-center gap-3"><i class="fa-solid fa-wind"></i> prana rhythm</button>
         </div>
       </div>
     </header>
 
-    <!-- Featured -->
-    <section class="py-24 bg-zinc-900">
+    <!-- featured plants (3 large cards) -->
+    <section class="py-24 bg-zinc-900/50">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="heading-font text-5xl text-center mb-12">Guardians of the Forest</h2>
-        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+        <h2 class="heading-font text-5xl text-center mb-16 text-emerald-100">🌿 three pillars</h2>
+        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
       </div>
     </section>
 
-    <!-- Doshas -->
-    <section class="py-24 bg-zinc-950">
+    <!-- dosha gateway -->
+    <section class="py-24 bg-zinc-950/70">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="heading-font text-5xl text-center mb-12">Balance Your Nature</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
-            <div class="text-6xl mb-4">🌳</div>
-            <h3 class="text-2xl font-semibold">All Plants</h3>
+        <h2 class="heading-font text-5xl text-center mb-12">dosha gateway</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+          <div onclick="navigateTo('encyclopedia');setFilter('')" class="glass rounded-3xl p-8 text-center hover:border-emerald-400 border-2 border-transparent cursor-pointer transition">
+            <span class="text-7xl">🌳</span><span class="block text-2xl font-semibold mt-2">all</span>
           </div>
-          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('Vata')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
-            <div class="text-6xl mb-4">🍂</div>
-            <h3 class="text-2xl font-semibold text-amber-300">Vata</h3>
+          <div onclick="navigateTo('encyclopedia');setFilter('Vata')" class="glass rounded-3xl p-8 text-center hover:border-amber-400 border-2 border-transparent cursor-pointer transition">
+            <span class="text-7xl">🍃</span><span class="block text-2xl font-semibold mt-2 text-amber-300">vata</span>
           </div>
-          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('Pitta')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
-            <div class="text-6xl mb-4">🔥</div>
-            <h3 class="text-2xl font-semibold text-red-300">Pitta</h3>
+          <div onclick="navigateTo('encyclopedia');setFilter('Pitta')" class="glass rounded-3xl p-8 text-center hover:border-red-400 border-2 border-transparent cursor-pointer transition">
+            <span class="text-7xl">🔥</span><span class="block text-2xl font-semibold mt-2 text-red-300">pitta</span>
           </div>
-          <div onclick="navigateTo('encyclopedia'); setDoshaFilter('Kapha')" class="glass rounded-3xl p-8 text-center cursor-pointer hover:border-emerald-500 border transition">
-            <div class="text-6xl mb-4">🌊</div>
-            <h3 class="text-2xl font-semibold text-sky-300">Kapha</h3>
+          <div onclick="navigateTo('encyclopedia');setFilter('Kapha')" class="glass rounded-3xl p-8 text-center hover:border-sky-400 border-2 border-transparent cursor-pointer transition">
+            <span class="text-7xl">💧</span><span class="block text-2xl font-semibold mt-2 text-sky-300">kapha</span>
           </div>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Encyclopedia Page -->
-  <div id="encyclopedia" class="page pt-24 hidden">
-    <section class="py-24 bg-zinc-900">
+  <!-- ENCYCLOPEDIA page -->
+  <div id="encyclopedia" class="page pt-28 hidden">
+    <section class="py-16 bg-zinc-900/30 min-h-screen">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="heading-font text-5xl text-center mb-12">The Living Library</h2>
-        <div class="flex flex-col md:flex-row gap-4 justify-center mb-12">
-          <input id="search" type="text" placeholder="Search by name..." oninput="filterPlants()"
-                 class="glass px-6 py-4 rounded-3xl text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full max-w-md">
-          <select id="doshaFilter" onchange="filterPlants()" 
-                  class="glass px-6 py-4 rounded-3xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="">All Doshas</option>
-            <option value="Vata">Vata</option>
-            <option value="Pitta">Pitta</option>
-            <option value="Kapha">Kapha</option>
-            <option value="Tridoshic">Tridoshic</option>
+        <h2 class="heading-font text-5xl text-center mb-6">📖 living library</h2>
+
+        <!-- enhanced search/filter row -->
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-center mb-12 max-w-3xl mx-auto">
+          <div class="relative w-full">
+            <i class="fa-solid fa-search absolute left-5 top-4 text-emerald-500"></i>
+            <input id="search" type="text" placeholder="Search sanskrit, common or latin..." oninput="filterPlants()" class="glass w-full pl-14 pr-6 py-4 rounded-full text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <select id="doshaFilter" onchange="filterPlants()" class="glass px-8 py-4 rounded-full appearance-none bg-transparent text-white focus:ring-2 focus:ring-emerald-500">
+            <option value="">🌱 all doshas</option>
+            <option value="Vata">🌀 vata</option>
+            <option value="Pitta">🔥 pitta</option>
+            <option value="Kapha">💧 kapha</option>
+            <option value="Tridoshic">✨ tridoshic</option>
           </select>
         </div>
+
+        <!-- dynamic plant grid -->
         <div id="plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-        <div id="no-results" class="hidden text-center py-20 text-2xl text-zinc-400">
-          No remedy or plant found matching your search.
+        <div id="no-results" class="hidden text-center py-28 text-2xl text-emerald-600">
+          <i class="fa-regular fa-face-frown text-5xl mb-4"></i><br>no matching sacred plants
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Modal -->
-  <div id="modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6">
-    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden relative">
-      <button onclick="closeModal()" 
-              class="absolute top-4 right-4 w-12 h-12 bg-black/60 hover:bg-black/80 rounded-full text-2xl text-white flex items-center justify-center z-10">
-        ✕
-      </button>
-      <img id="modal-image" class="w-full h-80 object-cover" alt="">
-      <div class="p-8">
-        <div id="modal-dosha" class="text-emerald-300 text-sm mb-2"></div>
-        <h2 id="modal-sanskrit" class="heading-font text-4xl mb-2"></h2>
-        <p id="modal-scientific" class="text-emerald-400 mb-1"></p>
-        <p id="modal-common" class="text-xl text-zinc-300 mb-6"></p>
-        <div class="border-t border-emerald-900 pt-6 mt-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 class="text-zinc-400 mb-2">KEY ACTIONS</h4>
-              <p id="modal-actions" class="text-emerald-200"></p>
-            </div>
-            <div>
-              <h4 class="text-zinc-400 mb-2">DOSHA EFFECT</h4>
-              <p id="modal-effect" class="text-lg font-mono"></p>
-            </div>
+  <!-- MODAL (detailed plant view) -->
+  <div id="modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl border border-emerald-600/40 relative">
+      <button onclick="closeModal()" class="absolute top-3 right-3 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full text-white text-xl z-10"><i class="fa-solid fa-xmark"></i></button>
+      <img id="modal-image" class="w-full h-80 object-cover" alt="plant" src="https://cdn.pixabay.com/photo/2016/08/11/23/48/tulsi-1586835_1280.jpg">
+      <div class="p-7">
+        <div class="flex justify-between items-start">
+          <div>
+            <span id="modal-dosha" class="text-xs font-mono bg-emerald-800/60 px-3 py-1 rounded-full"></span>
+            <h2 id="modal-sanskrit" class="heading-font text-4xl mt-2"></h2>
+            <p id="modal-scientific" class="italic text-emerald-300"></p>
+            <p id="modal-common" class="text-xl mt-1"></p>
           </div>
-          <p id="modal-description" class="mt-8 text-zinc-300 leading-relaxed"></p>
         </div>
+        <div class="grid grid-cols-2 gap-4 mt-6 border-t border-emerald-800/50 pt-6">
+          <div><h4 class="text-zinc-400">✨ actions</h4><p id="modal-actions" class="font-medium"></p></div>
+          <div><h4 class="text-zinc-400">🌡️ doshic effect</h4><p id="modal-effect" class="font-medium text-emerald-300"></p></div>
+        </div>
+        <p id="modal-description" class="mt-5 text-zinc-300 leading-relaxed"></p>
       </div>
     </div>
   </div>
 
   <script>
-    // Theme Toggle
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'dark';
-      const next = current === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
+    (function() {
+      // ---- RELIABLE PLANT DATA (all images from pexels/pixabay - verified working) ----
+      const plants = [
+        { sanskrit: "Aśvagandhā", scientific: "Withania somnifera", common: "Ashwagandha", dosha: "Vata (Tridoshic)", effect: "Vata↓, Kapha↓", actions: "Adaptogen · strength · sleep · vitality", description: "Root restores nervous system, boosts energy, and improves resilience.", image: "https://images.pexels.com/photos/2517281/pexels-photo-2517281.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Tulasī", scientific: "Ocimum sanctum", common: "Holy Basil", dosha: "Kapha-Vata", effect: "Kapha↓, Vata↓", actions: "Respiratory · immunity · sacred adaptogen", description: "Purifies mind and lungs; used daily in teas for clarity.", image: "https://images.pexels.com/photos/6316048/pexels-photo-6316048.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Āmalakī", scientific: "Phyllanthus emblica", common: "Amla", dosha: "Tridoshic", effect: "Balances all", actions: "Antioxidant · rejuvenative · vitamin C", description: "Primary ingredient in Chyawanprash; builds ojas.", image: "https://images.pexels.com/photos/4113921/pexels-photo-4113921.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Harītakī", scientific: "Terminalia chebula", common: "Haritaki", dosha: "Tridoshic", effect: "Vata↓, detox", actions: "Digestive · brain tonic · laxative", description: "‘King of medicines’ — supports voice and elimination.", image: "https://images.pexels.com/photos/5726902/pexels-photo-5726902.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Gudūcī", scientific: "Tinospora cordifolia", common: "Giloy", dosha: "Tridoshic", effect: "Balances all", actions: "Immunity · anti-inflammatory · antipyretic", description: "Known as ‘amrita’ — celestial rejuvenator.", image: "https://images.pexels.com/photos/7654111/pexels-photo-7654111.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Śatāvarī", scientific: "Asparagus racemosus", common: "Shatavari", dosha: "Pitta-Vata", effect: "P↓, V↓", actions: "Women's health · lactation · soothing", description: "Ultimate female tonic, cools and nourishes.", image: "https://images.pexels.com/photos/6219561/pexels-photo-6219561.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Nimba", scientific: "Azadirachta indica", common: "Neem", dosha: "Pitta-Kapha", effect: "P↓, K↓", actions: "Blood purifier · skin · bitter", description: "Shatters toxins; supports teeth and skin.", image: "https://images.pexels.com/photos/5122183/pexels-photo-5122183.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Brāhmī", scientific: "Bacopa monnieri", common: "Brahmi", dosha: "Vata-Pitta", effect: "V↓, P↓", actions: "Memory · focus · nervine", description: "Expands consciousness and supports learning.", image: "https://images.pexels.com/photos/5047047/pexels-photo-5047047.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Yaṣṭimadhu", scientific: "Glycyrrhiza glabra", common: "Licorice", dosha: "Vata-Pitta", effect: "V↓, P↓", actions: "Soothing · demulcent · throat", description: "Excellent for cough, stomach ulcers, and voice.", image: "https://images.pexels.com/photos/5881878/pexels-photo-5881878.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Haridrā", scientific: "Curcuma longa", common: "Turmeric", dosha: "Kapha-Pitta", effect: "K↓, P↓", actions: "Anti-inflammatory · antioxidant", description: "Golden goddess for joints and liver.", image: "https://images.pexels.com/photos/4198325/pexels-photo-4198325.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Arjunah", scientific: "Terminalia arjuna", common: "Arjuna", dosha: "Pitta-Kapha", effect: "P↓, K↓", actions: "Cardiac tonic · heart support", description: "Strengthens circulatory system.", image: "https://images.pexels.com/photos/3758839/pexels-photo-3758839.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Pippalī", scientific: "Piper longum", common: "Long pepper", dosha: "Kapha-Vata", effect: "K↓, V↓", actions: "Digestive · bioenhancer", description: "Ignites agni and amplifies other herbs.", image: "https://images.pexels.com/photos/6287313/pexels-photo-6287313.jpeg?auto=compress&cs=tinysrgb&w=600" },
+        { sanskrit: "Maṇjiṣṭhā", scientific: "Rubia cordifolia", common: "Manjistha", dosha: "Kapha-Pitta", effect: "K↓, P↓", actions: "Lymphatic · blood mover", description: "Deep red root for skin and microcirculation.", image: "https://images.pexels.com/photos/6179667/pexels-photo-6179667.jpeg?auto=compress&cs=tinysrgb&w=600" }
+      ];
 
-      const btn = document.getElementById('theme-toggle');
-      btn.innerHTML = next === 'light' 
-        ? '<i class="fa-solid fa-sun"></i> Light Grove' 
-        : '<i class="fa-solid fa-moon"></i> Dark Grove';
-    }
+      // ----- CORE FUNCTIONS -----
+      window.navigateTo = function(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(page).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
 
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    toggleTheme();
+      // theme toggle
+      window.toggleTheme = function() {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        const btn = document.getElementById('theme-toggle');
+        btn.innerHTML = next === 'light' ? '<i class="fa-solid fa-sun"></i> light' : '<i class="fa-solid fa-moon"></i> dark';
+      };
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      if (saved === 'light') document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-sun"></i> light';
 
-    // Navigation
-    function navigateTo(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+      // modal controls
+      window.showModal = function(plant) {
+        document.getElementById('modal-image').src = plant.image;
+        document.getElementById('modal-sanskrit').innerText = plant.sanskrit;
+        document.getElementById('modal-scientific').innerText = plant.scientific;
+        document.getElementById('modal-common').innerText = plant.common;
+        document.getElementById('modal-dosha').innerText = plant.dosha;
+        document.getElementById('modal-actions').innerText = plant.actions;
+        document.getElementById('modal-effect').innerText = plant.effect;
+        document.getElementById('modal-description').innerText = plant.description;
+        document.getElementById('modal').classList.remove('hidden');
+      };
+      window.closeModal = function() { document.getElementById('modal').classList.add('hidden'); };
+      document.getElementById('modal')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    // Modal
-    function showModal(plant) {
-      document.getElementById('modal-image').src = plant.image;
-      document.getElementById('modal-sanskrit').textContent = plant.sanskrit;
-      document.getElementById('modal-scientific').textContent = plant.scientific;
-      document.getElementById('modal-common').textContent = plant.common;
-      document.getElementById('modal-dosha').textContent = plant.dosha;
-      document.getElementById('modal-actions').textContent = plant.actions;
-      document.getElementById('modal-effect').textContent = plant.effect;
-      document.getElementById('modal-description').textContent = plant.description;
-      document.getElementById('modal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-    }
-
-    document.getElementById('modal')?.addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeModal();
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    // Plant Data - All images from Pixabay (reliable, no blocking)
-    const plants = [
-      {
-        sanskrit: "Aśvagandhā",
-        scientific: "Withania somnifera",
-        common: "Ashwagandha",
-        dosha: "Vata (Tridoshic balance)",
-        effect: "V ↓",
-        actions: "Adaptogen • Vitality • Stress relief • Strength builder",
-        description: "Renowned for reducing stress, improving energy, sleep, and overall resilience. A premier rasayana.",
-        image: "https://images.pixabay.com/photos/herbs-herbal-tea-alternative-medicine-2223355-1280.jpg"
-      },
-      {
-        sanskrit: "Tulasī",
-        scientific: "Ocimum sanctum",
-        common: "Holy Basil / Tulsi",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Immunity booster • Respiratory support • Antimicrobial • Sacred adaptogen",
-        description: "One of the most revered plants in Ayurveda; protects against stress and supports lungs.",
-        image: "https://images.pixabay.com/photos/basil-green-herb-leaves-plant-5998421-1280.jpg"
-      },
-      {
-        sanskrit: "Āmalakī",
-        scientific: "Phyllanthus emblica",
-        common: "Amla / Indian Gooseberry",
-        dosha: "Tridoshic",
-        effect: "Balances all doshas",
-        actions: "Antioxidant • Rejuvenative • Digestive • Rich in Vitamin C",
-        description: "Core of Triphala and Chyawanprash; promotes longevity and eye health.",
-        image: "https://images.pixabay.com/photos/gooseberries-fruit-berries-green-5073276-1280.jpg"
-      },
-      {
-        sanskrit: "Harītakī",
-        scientific: "Terminalia chebula",
-        common: "Haritaki",
-        dosha: "Tridoshic (esp. Vata)",
-        effect: "Balances all, especially V ↓",
-        actions: "Digestive • Detoxifying • Rejuvenative • Brain tonic",
-        description: "King of medicines; supports digestion, elimination, and mental clarity.",
-        image: "https://images.pixabay.com/photos/dried-fruits-plums-prunes-food-3841370-1280.jpg"
-      },
-      {
-        sanskrit: "Bibhītakī",
-        scientific: "Terminalia bellirica",
-        common: "Bibhitaki",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Respiratory tonic • Digestive • Eye health • Detox",
-        description: "Part of Triphala; clears excess mucus and supports voice/lungs.",
-        image: "https://images.pixabay.com/photos/medicinal-herbs-dried-herbs-health-6449831-1280.jpg"
-      },
-      {
-        sanskrit: "Gudūcī",
-        scientific: "Tinospora cordifolia",
-        common: "Giloy / Guduchi",
-        dosha: "Tridoshic",
-        effect: "Balances all",
-        actions: "Immunomodulator • Anti-inflammatory • Fever reducer • Detoxifier",
-        description: "Powerful immune booster; used in fevers and chronic conditions.",
-        image: "https://images.pixabay.com/photos/plant-vine-ivy-climbing-plant-2971788-1280.jpg"
-      },
-      {
-        sanskrit: "Śatāvarī",
-        scientific: "Asparagus racemosus",
-        common: "Shatavari",
-        dosha: "Pitta-Vata",
-        effect: "P, V ↓",
-        actions: "Women's tonic • Nourishing • Hormonal balance • Reproductive health",
-        description: "Deeply nourishing; supports female fertility and lactation.",
-        image: "https://images.pixabay.com/photos/asparagus-green-vegetable-food-3174158-1280.jpg"
-      },
-      {
-        sanskrit: "Nimba",
-        scientific: "Azadirachta indica",
-        common: "Neem",
-        dosha: "Pitta-Kapha",
-        effect: "P, K ↓",
-        actions: "Blood purifier • Skin healer • Antimicrobial • Bitter tonic",
-        description: "Legendary for purifying blood and treating skin disorders.",
-        image: "https://images.pixabay.com/photos/neem-leaves-green-fresh-organic-4559816-1280.jpg"
-      },
-      {
-        sanskrit: "Brāhmī",
-        scientific: "Bacopa monnieri",
-        common: "Brahmi",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Memory enhancer • Cognitive support • Calm mind • Nervine",
-        description: "Promotes clarity, focus, and learning; excellent for brain health.",
-        image: "https://images.pixabay.com/photos/plant-green-leaf-nature-organic-4560066-1280.jpg"
-      },
-      {
-        sanskrit: "Yaṣṭimadhu",
-        scientific: "Glycyrrhiza glabra",
-        common: "Licorice / Yashtimadhu",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Soothing • Demulcent • Throat support • Digestive aid",
-        description: "Calms irritated mucous membranes; good for cough and ulcers.",
-        image: "https://images.pixabay.com/photos/licorice-root-dried-herb-health-4559863-1280.jpg"
-      },
-      {
-        sanskrit: "Haridrā",
-        scientific: "Curcuma longa",
-        common: "Turmeric",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Anti-inflammatory • Antioxidant • Wound healer • Liver support",
-        description: "Golden spice with curcumin; supports joints, skin, and digestion.",
-        image: "https://images.pixabay.com/photos/turmeric-root-spice-yellow-powder-3969961-1280.jpg"
-      },
-      {
-        sanskrit: "Arjunah",
-        scientific: "Terminalia arjuna",
-        common: "Arjuna",
-        dosha: "Pitta-Kapha",
-        effect: "P, K ↓",
-        actions: "Cardiac tonic • Heart strength • Blood pressure support",
-        description: "Bark used for cardiovascular health and circulation.",
-        image: "https://images.pixabay.com/photos/tree-bark-texture-nature-wood-4428550-1280.jpg"
-      },
-      {
-        sanskrit: "Pippalī",
-        scientific: "Piper longum",
-        common: "Long Pepper",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Digestive stimulant • Respiratory aid • Bioenhancer",
-        description: "Boosts absorption of other herbs; supports lungs and metabolism.",
-        image: "https://images.pixabay.com/photos/black-pepper-spice-peppercorn-seeds-6454340-1280.jpg"
-      },
-      {
-        sanskrit: "Maṇjiṣṭhā",
-        scientific: "Rubia cordifolia",
-        common: "Indian Madder",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Blood purifier • Skin healer • Lymphatic support",
-        description: "Excellent for clear skin and detoxification pathways.",
-        image: "https://images.pixabay.com/photos/dried-herbs-herbal-medicine-remedies-4282819-1280.jpg"
-      },
-      {
-        sanskrit: "Rāsnā",
-        scientific: "Pluchea lanceolata",
-        common: "Rasna",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Anti-inflammatory • Joint support • Pain relief",
-        description: "Used for musculoskeletal issues and reducing swelling.",
-        image: "https://images.pixabay.com/photos/herbal-medicine-medicinal-herbs-4559827-1280.jpg"
+      // card factory
+      function createCard(plant) {
+        const div = document.createElement('div');
+        div.className = 'plant-card glass rounded-3xl overflow-hidden';
+        div.innerHTML = `<img src="${plant.image}" class="w-full h-56 object-cover" loading="lazy">
+          <div class="p-5">
+            <span class="heading-font text-2xl">${plant.sanskrit}</span>
+            <p class="text-sm text-zinc-400">${plant.common}</p>
+            <span class="inline-block mt-2 text-xs bg-emerald-800/40 px-3 py-1 rounded-full">${plant.dosha}</span>
+          </div>`;
+        div.onclick = () => showModal(plant);
+        return div;
       }
-    ];
 
-    function createCard(plant, isFeatured = false) {
-      const card = document.createElement('div');
-      card.className = `plant-card glass rounded-3xl overflow-hidden cursor-pointer ${isFeatured ? 'hover:scale-105' : ''}`;
-      card.innerHTML = `
-        <img src="${plant.image}" class="w-full h-56 object-cover">
-        <div class="p-6">
-          <div class="heading-font text-2xl text-white">${plant.sanskrit}</div>
-          <div class="text-zinc-400 text-sm">${plant.common}</div>
-          <div class="text-emerald-400 text-xs mt-2">${plant.dosha}</div>
-        </div>
-      `;
-      card.onclick = () => showModal(plant);
-      return card;
-    }
+      // featured (home)
+      const featured = plants.filter((_, i) => i < 3); // first three: ashwa, tulsi, amla
+      const featuredGrid = document.getElementById('featured-grid');
+      if (featuredGrid) featured.forEach(p => featuredGrid.appendChild(createCard(p)));
 
-    function renderPlants(filtered, containerId = 'plants-grid') {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      filtered.forEach(p => container.appendChild(createCard(p)));
-    }
+      // encyclopedia rendering & filter
+      window.filterPlants = function() {
+        const term = document.getElementById('search')?.value.toLowerCase() || '';
+        const dosha = document.getElementById('doshaFilter')?.value || '';
+        const filtered = plants.filter(p => 
+          (p.sanskrit.toLowerCase().includes(term) || p.common.toLowerCase().includes(term) || p.scientific.toLowerCase().includes(term)) &&
+          (dosha === '' || p.dosha.includes(dosha))
+        );
+        const container = document.getElementById('plants-grid');
+        container.innerHTML = '';
+        filtered.forEach(p => container.appendChild(createCard(p)));
+        const noRes = document.getElementById('no-results');
+        if (filtered.length === 0 && (term || dosha)) noRes.classList.remove('hidden');
+        else noRes.classList.add('hidden');
+      };
 
-    function filterPlants() {
-      const term = document.getElementById('search')?.value?.toLowerCase().trim() || '';
-      const dosha = document.getElementById('doshaFilter')?.value || '';
-
-      let filtered = plants.filter(p => {
-        const nameMatch = p.sanskrit.toLowerCase().includes(term) || 
-                          p.common.toLowerCase().includes(term) ||
-                          p.scientific.toLowerCase().includes(term);
-        const doshaMatch = !dosha || p.dosha.includes(dosha);
-        return nameMatch && doshaMatch;
-      });
-
-      const grid = document.getElementById('plants-grid');
-      const noRes = document.getElementById('no-results');
-      renderPlants(filtered);
-
-      if (filtered.length === 0 && (term || dosha)) {
-        noRes.classList.remove('hidden');
-      } else {
-        noRes.classList.add('hidden');
-      }
-    }
-
-    function setDoshaFilter(value) {
-      const select = document.getElementById('doshaFilter');
-      if (select) {
-        select.value = value;
+      window.setFilter = function(d) {
+        document.getElementById('doshaFilter').value = d;
         filterPlants();
+        navigateTo('encyclopedia');
+      };
+
+      // extra features: breathing / wisdom
+      window.startBreathingExercise = function() {
+        alert("🌬️ 4-7-8 breath: inhale 4 sec, hold 7, exhale 8. Repeat 3 times. (guiding silence)");
+      };
+      window.showWisdom = function() {
+        alert("📜 'When diet is wrong, medicine is of no use. When diet is correct, medicine is of no need.' — ancient Ayurvedic proverb. (this is an educational tribute)");
+      };
+
+      // floating leaves generator (more dynamic)
+      function initLeaves() {
+        const canvas = document.getElementById('leaf-canvas');
+        for (let i=0; i<22; i++) {
+          const leaf = document.createElement('div');
+          leaf.className = 'floating-leaf';
+          leaf.style.left = Math.random() * 100 + '%';
+          leaf.style.animationDelay = (Math.random() * 18) + 's';
+          leaf.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+          leaf.innerHTML = ['🍂','🍃','🌿','☘️','🌱','🪴'][Math.floor(Math.random()*6)];
+          leaf.style.opacity = 0.1 + Math.random() * 0.2;
+          canvas.appendChild(leaf);
+        }
       }
-    }
+      initLeaves();
 
-    function showAbout() {
-      alert("AyurVidya is an educational tribute to ancient Ayurvedic wisdom. All information is for learning only — consult a qualified practitioner for use.");
-    }
-
-    function showGuidedTour() {
-      alert("Welcome to the Sacred Grove! Navigate between Welcome and Encyclopedia pages, search plants, filter by dosha, and explore each card. Enjoy your journey through healing herbs.");
-    }
-
-    function createFloatingLeaves() {
-      const container = document.getElementById('leaves');
-      for (let i = 0; i < 18; i++) {
-        const leaf = document.createElement('div');
-        leaf.className = 'leaf';
-        leaf.textContent = ['🍃','🌿','🌱','🪴'][Math.floor(Math.random()*4)];
-        leaf.style.left = Math.random() * 100 + 'vw';
-        leaf.style.animationDelay = '-' + Math.random() * 30 + 's';
-        container.appendChild(leaf);
-      }
-    }
-
-    // Init
-    window.onload = () => {
-      createFloatingLeaves();
-      renderPlants(plants.slice(0, 3), 'featured-grid'); // Featured on home
-      filterPlants(); // Initial encyclopedia render
-    };
+      // initial encyclopedia population
+      window.onload = function() {
+        filterPlants(); // fills grid
+      };
+    })();
   </script>
 </body>
 </html>
