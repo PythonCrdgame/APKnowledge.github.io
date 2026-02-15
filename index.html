@@ -261,159 +261,159 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    // Plant Data - Expanded List
-    const plants = [
-      {
-        sanskrit: "Aśvagandhā",
-        scientific: "Withania somnifera",
-        common: "Ashwagandha",
-        dosha: "Vata (Tridoshic balance)",
-        effect: "V ↓",
-        actions: "Adaptogen • Vitality • Stress relief • Strength builder",
-        description: "Renowned for reducing stress, improving energy, sleep, and overall resilience. A premier rasayana.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Withania_somnifera1.jpg/800px-Withania_somnifera1.jpg"
-      },
-      {
-        sanskrit: "Tulasī",
-        scientific: "Ocimum sanctum",
-        common: "Holy Basil",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Immunity booster • Respiratory support • Antimicrobial • Sacred adaptogen",
-        description: "One of the most revered plants in Ayurveda; protects against stress and supports lungs.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Ocimum_tenuiflorum.jpg/800px-Ocimum_tenuiflorum.jpg"
-      },
-      {
-        sanskrit: "Āmalakī",
-        scientific: "Phyllanthus emblica",
-        common: "Amla / Indian Gooseberry",
-        dosha: "Tridoshic",
-        effect: "Balances all doshas",
-        actions: "Antioxidant • Rejuvenative • Digestive • Rich in Vitamin C",
-        description: "Core of Triphala and Chyawanprash; promotes longevity and eye health.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phyllanthus_emblica1.jpg/800px-Phyllanthus_emblica1.jpg"
-      },
-      {
-        sanskrit: "Harītakī",
-        scientific: "Terminalia chebula",
-        common: "Haritaki",
-        dosha: "Tridoshic (esp. Vata)",
-        effect: "Balances all, especially V ↓",
-        actions: "Digestive • Detoxifying • Rejuvenative • Brain tonic",
-        description: "King of medicines; supports digestion, elimination, and mental clarity.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Terminalia_chebula_01.JPG/800px-Terminalia_chebula_01.JPG"
-      },
-      {
-        sanskrit: "Bibhītakī",
-        scientific: "Terminalia bellirica",
-        common: "Bibhitaki",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Respiratory tonic • Digestive • Eye health • Detox",
-        description: "Part of Triphala; clears excess mucus and supports voice/lungs.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Terminalia_bellirica_01.jpg/800px-Terminalia_bellirica_01.jpg"
-      },
-      {
-        sanskrit: "Gudūcī",
-        scientific: "Tinospora cordifolia",
-        common: "Giloy / Guduchi",
-        dosha: "Tridoshic",
-        effect: "Balances all",
-        actions: "Immunomodulator • Anti-inflammatory • Fever reducer • Detoxifier",
-        description: "Powerful immune booster; used in fevers and chronic conditions.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Tinospora_cordifolia_02.jpg/800px-Tinospora_cordifolia_02.jpg"
-      },
-      {
-        sanskrit: "Śatāvarī",
-        scientific: "Asparagus racemosus",
-        common: "Shatavari",
-        dosha: "Pitta-Vata",
-        effect: "P, V ↓",
-        actions: "Women's tonic • Nourishing • Hormonal balance • Reproductive health",
-        description: "Deeply nourishing; supports female fertility and lactation.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Asparagus_racemosus_02.JPG/800px-Asparagus_racemosus_02.JPG"
-      },
-      {
-        sanskrit: "Nimba",
-        scientific: "Azadirachta indica",
-        common: "Neem",
-        dosha: "Pitta-Kapha",
-        effect: "P, K ↓",
-        actions: "Blood purifier • Skin healer • Antimicrobial • Bitter tonic",
-        description: "Legendary for purifying blood and treating skin disorders.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Azadirachta_indica_01.JPG/800px-Azadirachta_indica_01.JPG"
-      },
-      {
-        sanskrit: "Brāhmī",
-        scientific: "Bacopa monnieri",
-        common: "Brahmi",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Memory enhancer • Cognitive support • Calm mind • Nervine",
-        description: "Promotes clarity, focus, and learning; excellent for brain health.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bacopa_monnieri_01.JPG/800px-Bacopa_monnieri_01.JPG"
-      },
-      {
-        sanskrit: "Yaṣṭimadhu",
-        scientific: "Glycyrrhiza glabra",
-        common: "Licorice / Yashtimadhu",
-        dosha: "Vata-Pitta",
-        effect: "V, P ↓",
-        actions: "Soothing • Demulcent • Throat support • Digestive aid",
-        description: "Calms irritated mucous membranes; good for cough and ulcers.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Glycyrrhiza_glabra_01.JPG/800px-Glycyrrhiza_glabra_01.JPG"
-      },
-      {
-        sanskrit: "Haridrā",
-        scientific: "Curcuma longa",
-        common: "Turmeric",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Anti-inflammatory • Antioxidant • Wound healer • Liver support",
-        description: "Golden spice with curcumin; supports joints, skin, and digestion.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Curcuma_longa_01.jpg/800px-Curcuma_longa_01.jpg"
-      },
-      {
-        sanskrit: "Arjunah",
-        scientific: "Terminalia arjuna",
-        common: "Arjuna",
-        dosha: "Pitta-Kapha",
-        effect: "P, K ↓",
-        actions: "Cardiac tonic • Heart strength • Blood pressure support",
-        description: "Bark used for cardiovascular health and circulation.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Terminalia_arjuna_02.JPG/800px-Terminalia_arjuna_02.JPG"
-      },
-      {
-        sanskrit: "Pippalī",
-        scientific: "Piper longum",
-        common: "Long Pepper",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Digestive stimulant • Respiratory aid • Bioenhancer",
-        description: "Boosts absorption of other herbs; supports lungs and metabolism.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Piper_longum_01.JPG/800px-Piper_longum_01.JPG"
-      },
-      {
-        sanskrit: "Maṇjiṣṭhā",
-        scientific: "Rubia cordifolia",
-        common: "Indian Madder",
-        dosha: "Kapha-Pitta",
-        effect: "K, P ↓",
-        actions: "Blood purifier • Skin healer • Lymphatic support",
-        description: "Excellent for clear skin and detoxification pathways.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Rubia_cordifolia_01.jpg/800px-Rubia_cordifolia_01.jpg"
-      },
-      {
-        sanskrit: "Rāsnā",
-        scientific: "Pluchea lanceolata",
-        common: "Rasna",
-        dosha: "Kapha-Vata",
-        effect: "K, V ↓",
-        actions: "Anti-inflammatory • Joint support • Pain relief",
-        description: "Used for musculoskeletal issues and reducing swelling.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pluchea_lanceolata.jpg/800px-Pluchea_lanceolata.jpg"
-      }
-    ];
+// Plant Data - Expanded List with FIXED images
+const plants = [
+  {
+    sanskrit: "Aśvagandhā",
+    scientific: "Withania somnifera",
+    common: "Ashwagandha",
+    dosha: "Vata (Tridoshic balance)",
+    effect: "V ↓",
+    actions: "Adaptogen • Vitality • Stress relief • Strength builder",
+    description: "Renowned for reducing stress, improving energy, sleep, and overall resilience. A premier rasayana.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Withania_somnifera1.jpg/800px-Withania_somnifera1.jpg"
+  },
+  {
+    sanskrit: "Tulasī",
+    scientific: "Ocimum sanctum / Ocimum tenuiflorum",
+    common: "Holy Basil / Tulsi",
+    dosha: "Kapha-Vata",
+    effect: "K, V ↓",
+    actions: "Immunity booster • Respiratory support • Antimicrobial • Sacred adaptogen",
+    description: "One of the most revered plants in Ayurveda; protects against stress and supports lungs.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Holy_Basil_%28Ocimum_tenuiflorum%29_2.jpg/800px-Holy_Basil_%28Ocimum_tenuiflorum%29_2.jpg"
+  },
+  {
+    sanskrit: "Āmalakī",
+    scientific: "Phyllanthus emblica",
+    common: "Amla / Indian Gooseberry",
+    dosha: "Tridoshic",
+    effect: "Balances all doshas",
+    actions: "Antioxidant • Rejuvenative • Digestive • Rich in Vitamin C",
+    description: "Core of Triphala and Chyawanprash; promotes longevity and eye health.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phyllanthus_emblica1.jpg/800px-Phyllanthus_emblica1.jpg"
+  },
+  {
+    sanskrit: "Harītakī",
+    scientific: "Terminalia chebula",
+    common: "Haritaki",
+    dosha: "Tridoshic (esp. Vata)",
+    effect: "Balances all, especially V ↓",
+    actions: "Digestive • Detoxifying • Rejuvenative • Brain tonic",
+    description: "King of medicines; supports digestion, elimination, and mental clarity.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Terminalia_chebula_01.JPG/800px-Terminalia_chebula_01.JPG"
+  },
+  {
+    sanskrit: "Bibhītakī",
+    scientific: "Terminalia bellirica",
+    common: "Bibhitaki",
+    dosha: "Kapha-Pitta",
+    effect: "K, P ↓",
+    actions: "Respiratory tonic • Digestive • Eye health • Detox",
+    description: "Part of Triphala; clears excess mucus and supports voice/lungs.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Terminalia_bellirica_01.jpg/800px-Terminalia_bellirica_01.jpg"
+  },
+  {
+    sanskrit: "Gudūcī",
+    scientific: "Tinospora cordifolia",
+    common: "Giloy / Guduchi",
+    dosha: "Tridoshic",
+    effect: "Balances all",
+    actions: "Immunomodulator • Anti-inflammatory • Fever reducer • Detoxifier",
+    description: "Powerful immune booster; used in fevers and chronic conditions.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Gurjo_%28Nepalese-_%E0%A4%97%E0%A5%81%E0%A4%B0%E0%A5%8D%E0%A4%9C%E0%A5%8B%29_%285552408443%29.jpg/800px-Gurjo_%28Nepalese-_%E0%A4%97%E0%A5%81%E0%A4%B0%E0%A5%8D%E0%A4%9C%E0%A5%8B%29_%285552408443%29.jpg"
+  },
+  {
+    sanskrit: "Śatāvarī",
+    scientific: "Asparagus racemosus",
+    common: "Shatavari",
+    dosha: "Pitta-Vata",
+    effect: "P, V ↓",
+    actions: "Women's tonic • Nourishing • Hormonal balance • Reproductive health",
+    description: "Deeply nourishing; supports female fertility and lactation.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Asparagus_racemosus_02.JPG/800px-Asparagus_racemosus_02.JPG"
+  },
+  {
+    sanskrit: "Nimba",
+    scientific: "Azadirachta indica",
+    common: "Neem",
+    dosha: "Pitta-Kapha",
+    effect: "P, K ↓",
+    actions: "Blood purifier • Skin healer • Antimicrobial • Bitter tonic",
+    description: "Legendary for purifying blood and treating skin disorders.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Azadirachta_indica_01.JPG/800px-Azadirachta_indica_01.JPG"
+  },
+  {
+    sanskrit: "Brāhmī",
+    scientific: "Bacopa monnieri",
+    common: "Brahmi",
+    dosha: "Vata-Pitta",
+    effect: "V, P ↓",
+    actions: "Memory enhancer • Cognitive support • Calm mind • Nervine",
+    description: "Promotes clarity, focus, and learning; excellent for brain health.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bacopa_monnieri_01.JPG/800px-Bacopa_monnieri_01.JPG"
+  },
+  {
+    sanskrit: "Yaṣṭimadhu",
+    scientific: "Glycyrrhiza glabra",
+    common: "Licorice / Yashtimadhu",
+    dosha: "Vata-Pitta",
+    effect: "V, P ↓",
+    actions: "Soothing • Demulcent • Throat support • Digestive aid",
+    description: "Calms irritated mucous membranes; good for cough and ulcers.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Glycyrrhiza_glabra_01.JPG/800px-Glycyrrhiza_glabra_01.JPG"
+  },
+  {
+    sanskrit: "Haridrā",
+    scientific: "Curcuma longa",
+    common: "Turmeric",
+    dosha: "Kapha-Pitta",
+    effect: "K, P ↓",
+    actions: "Anti-inflammatory • Antioxidant • Wound healer • Liver support",
+    description: "Golden spice with curcumin; supports joints, skin, and digestion.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Curcuma_longa_01.jpg/800px-Curcuma_longa_01.jpg"
+  },
+  {
+    sanskrit: "Arjunah",
+    scientific: "Terminalia arjuna",
+    common: "Arjuna",
+    dosha: "Pitta-Kapha",
+    effect: "P, K ↓",
+    actions: "Cardiac tonic • Heart strength • Blood pressure support",
+    description: "Bark used for cardiovascular health and circulation.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Terminalia_arjuna_02.JPG/800px-Terminalia_arjuna_02.JPG"
+  },
+  {
+    sanskrit: "Pippalī",
+    scientific: "Piper longum",
+    common: "Long Pepper",
+    dosha: "Kapha-Vata",
+    effect: "K, V ↓",
+    actions: "Digestive stimulant • Respiratory aid • Bioenhancer",
+    description: "Boosts absorption of other herbs; supports lungs and metabolism.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Piper_longum_01.JPG/800px-Piper_longum_01.JPG"
+  },
+  {
+    sanskrit: "Maṇjiṣṭhā",
+    scientific: "Rubia cordifolia",
+    common: "Indian Madder",
+    dosha: "Kapha-Pitta",
+    effect: "K, P ↓",
+    actions: "Blood purifier • Skin healer • Lymphatic support",
+    description: "Excellent for clear skin and detoxification pathways.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rubia_cordifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-129.jpg/800px-Rubia_cordifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-129.jpg"
+  },
+  {
+    sanskrit: "Rāsnā",
+    scientific: "Pluchea lanceolata",
+    common: "Rasna",
+    dosha: "Kapha-Vata",
+    effect: "K, V ↓",
+    actions: "Anti-inflammatory • Joint support • Pain relief",
+    description: "Used for musculoskeletal issues and reducing swelling.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pluchea_lanceolata.jpg/800px-Pluchea_lanceolata.jpg"
+  }
+];
 
     function createCard(plant, isFeatured = false) {
       const card = document.createElement('div');
